@@ -1,0 +1,588 @@
+
+%
+% Compilation of the examples from the TikZ-UML manual, v. 1.0b (2013-03-01)
+% http://www.ensta-paristech.fr/~kielbasi/tikzuml/index.php?lang=en
+%
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{fullpage}
+\usepackage{pslatex}
+\usepackage{tikz-uml}
+\usepackage{placeins}
+\usepackage{indentfirst}
+
+\sloppy
+\hyphenpenalty 10000000
+
+\title{Trabalho Prático I- Programação Orientada a Objetos.}
+\author{Magno Juliano Gonçalves Santos}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+
+\newpage
+\section{Introdução.}
+A Linguagem de Modelagem Unificada, ou \textit{Unified Modeling Language} representa uma linguagem de modelagem que possibilita a representação de um sistema de forma padronizada, o intuito de sua utilização é facilitar a compreensão do sistema como um todo, antecedendo a parte de implementação. 
+
+A UML (Unified Modeling Language) é uma linguagem para especificação,
+documentação, visualização e desenvolvimento de sistemas orientados a objetos.
+Sintetiza os principais métodos existentes, sendo considerada uma das linguagens mais
+expressivas para modelagem de sistemas orientados a objetos. Por meio de seus
+diagramas é possível representar sistemas de softwares sob diversas perspectivas de
+visualização. [Vargas,2006] 
+
+Neste trabalho prático são representados Diagramas de Casos de Uso, Diagramas de Sequência, Diagramas de Classes e Diagramas de Eventos.
+
+\begin{itemize}
+\item \textbf{Diagramas de Casos de Uso}: Esse diagrama tem como objetivo especificar todas as funcionalidades inerentes ao sistema que será desenvolvido, essas funcionalidades representam os requisitos levantadas para desenvolvimento do sistema. Elementos que compõem os casos de usos: atores e relacionamentos. Dessa forma, o sistema é estruturado com as funcionalidades que são especificadas nos casos de uso e quem fará uso dessas funcionalidades, que são os atores. 
+\item \textbf{Diagramas de Classes}: O diagrama de classe é o mais utilizado da linguagem de modelagem, seu uso é fundamental para o auxílio no desenvolvimento de aplicações orientadas a objetos e também serve de apoio para os outros diagramas. Este diagrama mostra todas as classes
+que estão contidas no sistema, seus atributos e também os relacionamentos ente elas. [Martinez, 2015]
+\item \textbf{Diagramas de Sequência}: O diagrama de sequência representa como o próprio nome esclarece uma sequência de mensagens/ações trocadas entre vários objetos em uma determinada situação, eles são utilizados para atribuir responsabilidades a cada um dos objetos no sistema que está sendo desenvolvido.
+\item \textbf{Diagramas de Estados - Transição}:
+Esse diagrama é utilizado para representar o estado ou situação que o objeto se encontra ou pode se encontrar no decorrer da execução de processos relativos a um sistema. 
+\end{itemize}
+
+\newpage
+\section{Diagrama de Classes I - Computador.}
+\begin{center}
+\begin{tikzpicture}
+
+\umlclass [x=-2.5,y=-8]{Computador}{
+
+}{
++ ProcessaDados() : int\\
++ ArmazenaDados() : int\\
++ MovimentaDados() : int\\
++ Controle() : int
+}{}
+
+\umlnote [x=-2.75, y=-4]{Computador}{Processamento de dados.}
+
+\umlclass [x=-8,y=0]{Processador}{
+- Transistores\\
+- Modelo\\
+- Threads\\
+- Frequência\\
+- Cache\\
+- Bus\\
+- Soquete\\
+}
+{
++ RealizaOperaçõesE/S(): int \\
++ BuscaInstruções(): boolean \\
++ ObterDados(): boolean \\
++ GravaDados(): boolean
+}{}
+
+\umlnote[x=-8,y=-5]{Processador}{Busca e executa as instruções existentes na memória.}
+
+\umlclass [x=2]{Registradores}{
+- Capacidade de Armazenamento
+}{
++ ContaProgramas(): void\\
++ RegistraInstruções(): void\\
++ RegistraEndereçosMemória(): void\\
++ RegistraBuffersMemória(): void\\
++ RegistraFlags(): void
+}
+
+\umlnote [x=2, y=-5]{Registradores}{Armazena, os dados que estão sendo processados e algumas informações de controle.
+}
+
+\umlclass [x=4, y=-9]{Barramentos}{
+- Clock(relógio)\\
+- Largura\\
+- Transferências por\\
+ciclo de clock
+}{
++ TransmiteDados(): void\\
+}
+
+\umlnote [x=4, y=-13]{Barramentos}{Permitem a comunicação do processador com os demais componentes.}
+
+\umlclass [x=-8,y=-10]{Periféricos}{
+- Dispositivos de Entrada \\
+- Dispositivos de Saída
+}{
++ CodificaDados(): void\\
++ DecodificaDados(): void
+}
+
+\umlnote [x=-8,y=-15]{Periféricos} { Eles são os responsáveis pela interação da máquina com o homem. É por meio deles que os dados entram e saem do computador.}
+
+
+\umlclass [x=-2.5,y=-13.7]{Placa Mãe}{
+- Conectores \\
+- Soquete \\
+- Chipset \\
+- BIOS
+}{
++ InterconectaComponentes(): void
+}
+
+\umlnote [x=-2.5,y=-17.3]{Placa Mãe}{Integra todos os componentes do computador ao processador.
+}
+
+%Relacionamento%
+\umlunicompo {Computador}{Processador}
+\umlunicompo {Computador}{Registradores}
+\umlunicompo {Computador}{Barramentos}
+\umlunicompo {Computador}{Periféricos}
+\umlunicompo {Computador}{Placa Mãe}
+\end{tikzpicture}
+\end{center}
+
+\newpage
+\subsection{Diagrama de Classes II - Computador.}
+\begin{center}
+\begin{tikzpicture}
+\umlclass [x=-2,y=-2]{Computador}{
+
+}{
++ ProcessaDados() : int\\
++ ArmazenaDados() : int\\
++ MovimentaDados() : int\\
++ Controle() : int
+}{}
+
+\umlclass [x=-8,y=2]{Unidade de Controle}{
+}{
++ InterpretaInstruções() : boolean\\
++ MovimentaDados(): boolean
+
+}
+\umlnote [x=-8,y=-0.2]{Unidade de Controle}{Dados e execução dos programas.}
+
+\umlclass [x=2, y=2]{Unidade Lógica e Aritmética}{
+- Circuitos Integrados
+}
+{
++ ProcessaDados(): boolean \\
++ RealizaOperações(): boolean
+}
+
+\umlnote [x=3, y=-1]{Unidade Lógica e Aritmética}{Processar as informações por meio de cálculos e comparações.
+}
+
+\umlclass [x=-2,y=-7]{Memória}{
+- Memória Principal \\
+- Memória Secundária
+}{
++ ArmazenaDados() : void\\
+}
+
+\umlnote [x=4,y=-6]{Memória}{Todos os dispositivos que permitem a um computador guardar dados.
+}
+
+\umlclass [x=2, y=-12]{Memória ROM}{
+- ROM \\
+- PROM \\
+- EPROM \\
+- EEPROM \\
+- Flash ROM
+}{
++ RealizaOperacoes() : void\\
+}
+
+\umlnote [x=2, y=-15.5]{Memória ROM}{Operações de leitura.}
+
+\umlclass [x=-8,y=-14]{Memória RAM}{
+- DRAM (Dinâmica) \\
+- SRAM (Estática)
+}{
++ RealizarOperaçõesEscrita(): void\\
++ RealizarOperaçõesLeitura(): void
+}
+
+\umlnote [x=-8,y=-17]{Memória RAM}{Operações tanto de leitura como de escrita.}
+
+\umlclass[x=-8,y=-5]{HD}
+{
+- Braço \\
+- Cabeça \\
+- Superfícies \\
+- Trilhas \\
+- Setores \\
+- Cilindros \\
+- Capacidade de armazenamento \\
+- RPM \\
+- Tamanho do buffer \\
+- Tempo de latência \\
+- Tempo de busca \\
+- Taxa de transferência \\
+- Taxa de transferência interna \\
+- Tipo de barramento
+}{
++ ArmazenaDados() : void\\
+}
+
+\umlnote [x=-8,y=-10.7]{HD}{Armazenamento e integridade de dados.}
+%Relacionamento%
+\umlunicompo {Computador}{Memória}
+\umlunicompo {Computador}{Unidade de Controle}
+\umlunicompo {Computador}{Unidade Lógica e Aritmética}
+\umlinherit {HD}{Memória}
+\umlinherit {Memória ROM}{Memória}
+\umlinherit {Memória RAM}{Memória}
+\end{tikzpicture}
+\end{center}
+
+\newpage
+\subsection{Diagrama de Sequência - Computador.}
+\begin{center}
+\begin {tikzpicture}
+\begin {umlseqdiag}
+\umlactor [class=Periféricos] {p}
+\umlactor [class=Barramentos] {b}
+\umlactor [class=Processador]{pr}
+\umlactor [class=HD]{h}
+\umlactor [class=RAM] {mr}
+%Relações começando com begin e end%
+\begin {umlcall}[op={RequestCodificaDados()}] {p}{b}
+\end{umlcall}
+\begin {umlcall}[dt=4, op={RequestTransmiteDados()}] {b}{pr}
+\end{umlcall}
+\begin{umlcall}[dt=4,op={RequestRealizaOperaçõesE/S()}]{pr}{h}
+\end{umlcall}
+\begin{umlcall}[dt=4, op={ResponseCarregaSofware()}]{h}{b}
+\end{umlcall}
+\begin{umlcall}[dt=4,op={ResponseCarregasofware()}]{b}{pr}
+\end{umlcall}
+\begin{umlcall}[dt=4, op={RequestSolicitaSofware()}]{pr}{b}
+\end{umlcall}
+\begin{umlcall}[dt=4,op={RequestSolicitaSoftware()}]{b}{mr}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=ResponseAberturaSofware()}]{mr}{b}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=ResponseAberturaSofware()}]{b}{mr}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=ResponseTransmiteSofware()}]{b}{p}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=RequestFimdoSoftware()}]{b}{mr}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=ResponseFimdoSoftware()}]{mr}{b}
+\end{umlcall}
+\begin{umlcall}[{dt=4, op=ResponseFimdoSoftware()}]{b}{p}
+\end{umlcall}
+\end{umlseqdiag}
+\end{tikzpicture}
+\end{center}
+
+\newpage
+\begin{center}
+\section{Diagrama de Caso de Uso - Pousada.}
+\begin{tikzpicture}
+
+% Creamos el sistema UML
+\begin{umlsystem}{Caso de Uso}
+    \umlusecase[x=-2, y=3]{Solicita reserva}
+    \umlusecase[x=-2, y=1.4]{Cancela reserva solicitada}
+    \umlusecase[x=-2, y=0]{Confirma reserva solicitada}
+    \umlusecase[x=-2, y=-1.5]{Hospeda na pousada}
+    \umlusecase[x=5,y=3]{Consulta Agenda} 
+    \umlusecase[x=5, y=0.5,width=40]{Cadastra reserva preliminar}
+    \umlusecase[x=5,y=-7]{Emitir Conta}
+    \umlusecase[x=5,y=-8.5]{Lançamento Receitas}
+    \umlusecase[x=5,y=-9.8]{Lançamento Despesas}
+    \umlusecase[x=5, y=-2,width=40]{Cadastra reserva definitiva}
+    \umlusecase[x=-2,y=-5]{Gerenciar reservas}
+    \umlusecase[x=-3,y=-8.7,width=50]{Balanço Mensal das Despesas e Receitas}
+    \umlusecase[x=5,y=-5]{Débito no cartão}
+\end{umlsystem}
+
+% Creamos el actor en la posición (x,y)
+\umlactor[x=-7]{Cliente}
+\umlactor[x=-7,y=-6]{Sistema}
+\umlactor[x=9.5]{Funcionário}
+\umlactor[x=9.5,y=-8]{Proprietário} 
+\umlinherit{Proprietário}{Funcionário}
+
+% Asociamos a los distintos actores
+\umlassoc{Cliente}{usecase-1}
+\umlassoc{Cliente}{usecase-2}
+\umlassoc{Cliente}{usecase-3}
+\umlassoc{Cliente}{usecase-4}
+\umlassoc{Funcionário}{usecase-5}
+\umlassoc{Funcionário}{usecase-6}
+\umlassoc{Funcionário}{usecase-10}
+\umlassoc{Proprietário}{usecase-7}
+\umlassoc{Proprietário}{usecase-8}
+\umlassoc{Proprietário}{usecase-9}
+\umlassoc{Sistema}{usecase-11}
+\umlassoc{Sistema}{usecase-12}
+
+
+% Ponemos los <<include>> y los <<extend>>
+\umlinclude{usecase-1}{usecase-5}
+\umlinclude{usecase-6}{usecase-11}
+\umlinclude{usecase-8}{usecase-12}
+\umlinclude{usecase-9}{usecase-12}
+\umlinclude{usecase-10}{usecase-11}
+\umlinclude{usecase-4}{usecase-7}
+\umlinclude{usecase-5}{usecase-6}
+\umlinclude{usecase-3}{usecase-10}
+\umlinclude{usecase-10}{usecase-13}
+\end{tikzpicture}
+\end{center}
+
+\newpage
+\subsection{Fluxo de Eventos - Pousada.}
+\subsubsection{Precondições.}
+\begin{tabular}{|c|c|}
+\hline 
+1. O usuário do sistema deve se autentificar utilizando a tela de login, informando seu \textit{\textbf{login}} e \textit{\textbf{senha}}.\\ 
+\hline 
+\end{tabular} 
+\subsubsection{Fluxo Básico de Eventos - Pousada.}
+Nessa seção, será abordado o fluxo de eventos básico relacionado ao caso de uso representado. 
+\begin{enumerate}
+\item O cliente telefona para a pousada e \textbf{Solicita uma reserva}.
+\item O funcionário ou o proprietário que está atendendo o cliente, \textbf{Consulta a Agenda} para verificar a disponibilidade de datas para serem reservadas. 
+\item Caso haja disponibilidade para o dia requisitado, o funcionário ou o proprietário solicitão os dados do cliente para \textbf{Cadastrar uma reserva preliminar}.
+\item O cliente deve \textbf{Confirmar a reserva} com até 30 dias de antecedência, dessa forma a reserva passa de premilinar para uma \textbf{Reserva Definitiva}.
+\item Após cadastrar a reserva definitiva, o valor de uma diária é \textbf{Debitado} no cartão do cliente. 
+\item A não confirmação do cliente no prazo estipulado, implica no cancelamento da reserva de forma automática pelo sistema. 
+\item Se após a confirmação da reserva o cliente decidir por \textbf{Desistir da Reserva} em um período anterior a 7 dias da data agendada, ele recebe a metade do valor da diária debitada. 
+\item Caso ele desista em um período posterior a 7 dias da data agendada, o valor correspondente à diária é retido e ele não terá seu dinheiro de volta. 
+\item O cliente se \textbf{Hospeda} na pousada e o sistema \textbf{Emite uma conta} com os gastos advindos do mesmo, no período de estadia. 
+\item O proprietário da pousada deve lançar os gastos relativos às \textbf{Despesas} e as \textbf{Receitas} adquiridas, para que mensalmente o sistema seja capaz de \textbf{Gerar o balanço}. 
+\end{enumerate}
+
+\subsubsection{Fluxo de Eventos por Ator.}
+\begin{center}
+\begin{tikzpicture}
+\umlactor{Cliente}
+\end{tikzpicture}
+\end{center}
+\textit{\textbf{Ator}}: Cliente 
+\begin{enumerate}
+\item O diagrama de caso de uso associado se inicia quando o cliente telefona para a pousada para solicitar uma reserva. 
+\item O cliente solicita uma reserva preliminar. 
+\item O cliente informa ao funcionário ou proprietário da pousada os dados para cadastro de uma reserva preliminar. 
+\item O cliente pode cancelar a sua reserva informando ao funcionário ou proprietário da pousada, bem como pode confirmar sua reserva dentro do prazo estipulado. 
+\item Caso o cliente desista com até uma semana de antecedência, ele garante o reembolso de sua diária com metade do valor cobrado. 
+\item Se o cliente não cancelar a reserva e/ou não garantir sua hospedagem, pagará o valor de uma diária.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}
+\umlactor{Funcionário}
+\end{tikzpicture}
+\end{center}
+\textit{\textbf{Ator}}: Funcionário 
+\begin{enumerate}
+\item O funcionário deve se autentificar para entrar no sistema. 
+\item O diagrama de caso de uso representado inicia-se com a ligação do cliente, solicitando uma reserva. 
+\item O funcionário consulta a agenda para verificar a disponibilidade de reservas. 
+\item Caso exista vaga para o dia solicitado, ele cadastra a reserva preliminar do cliente. 
+\item Se o cliente confirmar uma reserva no prazo estipulado, é debitado o valor de uma diária. 
+\end{enumerate} 
+
+\begin{center}
+\begin{tikzpicture}
+\umlactor{Proprietário}
+\end{tikzpicture}
+\end{center}
+\textit{\textbf{Ator}}: Proprietário
+\begin{enumerate}
+\item O proprietário deve se autentificar para entrar no sistema.
+\item O proprietário deve realizar o lançamento correspondente às diárias no sistema. 
+\item O proprietário lança no sistema o consumo do cliente em momento de hospedagem. 
+\item Ao fim da hospedagem o proprietário deve fazer a emissão da conta relacionada às despesas oriundas do cliente no período que esteve hospedado. 
+\item O proprietário lança no sistema as despesas gerais da pousada. 
+\item O proprietário solicita o balanço mensal das despesas e receitas da pousada para o sistema, para manter o controle das mesmas. 
+\end{enumerate}
+
+\newpage
+\section{Diagrama de Sequência - Pousada.}
+%Atores%
+\begin {tikzpicture}
+\begin {umlseqdiag}
+\umlactor [class=Cliente] {c}
+\umlactor [class=Funcionário] {f}
+\umlactor [class=Proprietário]{p}
+\umlactor [class=Sistema]{s}
+%Relações começando com begin e end%
+\begin {umlcall}[op={Solicita Reserva()}] {c}{f}
+\end{umlcall}
+\begin {umlcall}[op={Consulta Agenda()},] {f}{s}
+\end{umlcall}
+\begin{umlcall}[dt=4, op={Solicita Dados Cliente()}, return=Informa dados]{f}{c}{c}{f}
+\end{umlcall}
+\begin{umlcall}[op={Cadastro do Cliente no Sistema()}]{f}{s}
+\end{umlcall}
+\begin{umlcall}[dt=5, op={Solicita Dados Reserva()}, return=Informa dados reserva]{f}{c}
+\end{umlcall}
+\begin{umlcall}[op={Cadastro da Reserva Preliminar()}]{f}{s}
+\end{umlcall}
+\begin{umlcall}[dt=8, op={Confirma Reserva()}]{c}{f}
+\end{umlcall}
+\begin{umlcall}[op={Verificar Data()}, return=Informa a data]{f}{s}
+\end{umlcall}
+%Fragmentos%
+\begin{umlfragment}[type=Reserva, label=Se, inner xsep=5]
+\begin{umlcall}[op={Confirma Reserva()}, dt=7, return=Débito do Cartão]{f}{s}
+\end{umlcall}
+\umlfpart[Se não]
+\begin{umlcall}[op={Cancela Reserva()}]{f}{s}
+\end{umlcall}
+\end{umlfragment}
+%Fim do fragmento%
+%Relações begin e end%
+\begin{umlcall}[dt=26, op={Desistir da Reserva()}]{c}{f}
+\end{umlcall}
+\begin{umlcall}[dt=-1, op={Verificar Data()}, return=Informa a data]{f}{s}
+\end{umlcall}
+\begin{umlfragment}[type=Até uma semana antes,label=Se, inner xsep=5]
+\begin{umlcall}[dt=5, op={Devolver metade()}]{s}{p}
+\end{umlcall}
+\umlfpart[Se não]
+\begin{umlcall}[op={Absorver dinheiro()}]{s}{p}
+\end{umlcall}
+%Fragmentos%
+\end{umlfragment}
+\begin{umlcall}[dt=1.2, op={Emitir Conta()}]{s}{p}
+\end{umlcall}
+\begin{umlcall}[dt=0, op={Emitir Conta()}]{p}{c}
+\end{umlcall}
+\begin{umlcall}[dt=1, op={Lançamento Despesas Receitas()}]{p}{s}
+\end{umlcall}
+\begin{umlcall}[dt=1, op={Solicita Balanço()}, return=Balanço Mensal]{p}{s}
+\end{umlcall}
+\end{umlseqdiag}
+\end{tikzpicture}
+
+\newpage
+\section{Diagrama de Classes - Pousada.}
+\begin{tikzpicture}
+\umlclass[x=-2.5, y=4] {Pessoa}{
+- nomePessoa : String \\
+- endereçoPessoa : String \\
+- emailPessoa : String \\
+- cpfPessoa : String \\
+}
+
+\umlclass[x=-7, y=-2] {Cliente}{
+- numeroCartao : String
+}{
++ SolicitaReserva() : void\\
++ InformarDadosCliente() : String\\
++ InformarDadosReserva() : String\\
++ ConfirmaReserva() : void\\
++ DesistirReserva() : void\\
+}
+
+\umlclass[x=2, y=-2, name=f] {Funcionário}{
+- salarioFuncionario : String \\
+}{
++ ConsultaAgenda() : void \\
++ CadastraClienteSistema() : void \\ 
++ CadastraReservaPreliminar() : void \\
++ VerificaData() : date \\
++ ConfirmaReserva() : String \\
+}
+
+\umlclass[x=-7, y=-7.6] {Agenda}{
+- dataReserva : date \\
+}{
++ Mensagem() : String \\
++ LeData() : boolean \\ 
+}
+
+\umlclass[x=2, y=-7.5] {Proprietário}{
+}{
+- EmiteConta () : void \\
+- LançamentoDespesasReceitas () : void \\
+- SolicitaBalanço () : String \\
+}
+
+%Relações%
+\umluniaggreg {Agenda}{Funcionário}
+\umlinherit {Funcionário}{Pessoa}
+\umlinherit {Proprietário}{Funcionário}
+\umlinherit {Cliente}{Pessoa}
+\end{tikzpicture}
+
+\newpage
+\section{Diagrama de Estado - Pousada.}
+\begin{center}
+\begin{tikzpicture}
+\begin{umlstate} [name=Geral,  fill=red!20] {Diagrama Caso de Uso - Pousada.}
+\begin{umlstate}[name=Ambiente]{Ambiente: Interior da Pousada.}
+\umlbasicstate[x=4,name=rp]{Reserva Preliminar}
+\umlbasicstate[x=4,y=-2.5,name=rc]{Reserva Confirmada}
+\umlbasicstate[x=4,y=-5,name=rd]{Reserva Definitiva}
+\umlbasicstate[x=4,y=-7.5,name=ho]{Hospedagem}
+\umlbasicstate[x=4,y=-10,name=ec]{Encerramento}
+\umlbasicstate[x=8,y=-12.3,name=en]{Emissão de conta}
+\umlbasicstate[x=4,y=-12.8,name=bm]{Balanço Mensal}
+\umlbasicstate[x=8,y=-7,name=de]{Desistência}
+\umlstatefinal[x=8,y=-14.6, name=final]
+\umlstatefinal[x=8,y=-9, name=final2]
+\end{umlstate}
+\umlbasicstate[x=2, y=3.4, name=cf]{Cancelamento informado ou automático}
+\umlstateinitial[x=-0.5,y=-2, name=initial]
+\umlbasicstate[x=12.5,y=-6,name=ca]{Cancelamento}
+\umlbasicstate[x=12.5,y=-3,name=a7]{Anterior a 7 dias}
+\umlbasicstate[x=12.5,y=-9,name=p7]{Posterior a 7 dias}
+\umlbasicstate[x=-0.5,name=sr]{Solicita Reserva}
+\umlstatefinal[x=12.5, y=0, name=final3]
+\umlstatefinal[x=12.5, y=-11.5, name=final4]
+\umlstatefinal[x=7.5, y=3.6, name=final5]
+\umltrans {rp}{rc}
+\umltrans {rc}{rd}
+\umltrans {rd}{ho}
+\umltrans {ho}{ec}
+\umltrans {ec}{en}
+\umltrans {en}{bm}
+\umltrans {rd}{de}
+\umltrans {bm}{final}
+\umltrans {de}{final2}
+\umltrans {sr}{rp}
+\umltrans {initial}{sr}
+\umltrans {de}{ca}
+\umltrans {ca}{p7}
+\umltrans {ca}{a7}
+\umltrans {rp}{cf}
+\umltrans {a7}{final3}
+\umltrans {p7}{final4}
+\umltrans {cf}{final5}
+\end{umlstate}
+\end{tikzpicture}
+\end{center}
+
+\newpage
+\section{Conclusão e Comentários Finais.}
+Neste trabalho prático da disciplina de Programação Orientada a Objetos foram apresentados os diagramas correlatos a dois tipos de sistemas, um sistema complexo que envolve a organização e arquitetura de um computador pessoal e um segundo sistema que envolve um gerencimento de uma pousada. 
+
+Através de sua execução, conseguimos compreender o funcionamento de diferentes diagramas e a sua importância para organização e padronização de informações de software. As principais dificuldades encontradas no momento de execução do trabalho ficaram para a compreensão de como utilizar o tikz-uml no latex (ferramenta proposta pelo docente) e representar todos os relacionamentos presentes nos diagramas, bem como identificar os atores que compõem o sistema.
+
+\newpage
+\bibliographystyle{plainnat}
+\begin{thebibliography}{1}
+\bibitem{vargas}
+  T. Vargas,
+  \emph{A História da UML e seus Diagramas},
+  2006.
+\bibitem{lopes}
+  S. Lopes,
+  J. Dias,
+  \emph{Utilizando os Diagramas da UML (Linguagem Unificada de Modelagem) para desenvolver aplicação em JSF.},
+  2011.
+\bibitem{martinez}
+  Martinez,
+  Marina,
+  \emph{UML, Linguagem Unificada de Modelagem.},
+  2005.
+\bibitem{moreira}
+  Moreira, Flávio Ferry De Oliveira.
+  \emph{Arquitetura de Computadores.},
+  2012.
+\end{thebibliography}
+\end{document}
